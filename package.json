@@ -12,5 +12,6 @@
   }
 , "devDependencies" :
   { "typescript" : "*"
+	, "mocha": "^2.4.5"
   }
 }
