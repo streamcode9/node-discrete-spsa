@@ -1,4 +1,16 @@
-{
-	"dependencies": {
-	}
+{ "name" : "discrete-spsa"
+, "version" : "0.1.0"
+, "description" : "Discrete Simultaneous Perturbation Stochastic Approximation algorithm by Hill, 2005"
+, "keywords" : [ "optimization", "stochastic", "algorithm", "multidimentional", "discrete" ]
+, "repository" : "streamcode9/node-discrete-spsa"
+, "licence" : "WTFPL"
+, "files" : [ "README.md", "lib" ]
+, "scripts" : { "prepublish" : "tsc" }
+, "main" : "lib/app.js"
+, "dependencies":
+  {
+  }
+, "devDependencies" :
+  { "typescript" : "*"
+  }
 }

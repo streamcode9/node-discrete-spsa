@@ -1,0 +1,9 @@
+Scripts/
+out/
+*.njsproj
+*.ts
+*.sln
+tsconfig.json
+*.tgz
+.npmignore
+
