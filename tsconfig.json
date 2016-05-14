@@ -2,11 +2,12 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "sourceMap": false,
         "outDir" : "lib"
     },
     "exclude": [
         "node_modules"
+		, "aur-vim-youcompleteme-git"
     ]
 }
