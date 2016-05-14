@@ -8,6 +8,6 @@ function scale(a: number[], n: number) { return a.map((x) => x * n) }
 
 export function iterationSync(f: (values: number[]) => number, theta: number[], a: number) {
 	var delta = theta.map(bernoulli)
-	var gradient = scale( delta, (f(vector_add(theta, delta)) - f(vector_sub(theta, delta)) / 2) * a)
+	var gradient = scale(delta, (f(vector_add(theta, delta)) - f(vector_sub(theta, delta))) / 2 * a)
 	return vector_sub(theta, gradient)
 }
