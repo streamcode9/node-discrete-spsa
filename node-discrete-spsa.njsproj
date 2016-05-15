@@ -35,6 +35,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <Content Include="package.json" />
+    <TypeScriptCompile Include="Scripts\typings\node\bluebird.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\mocha.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <TypeScriptCompile Include="test.ts">

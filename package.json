@@ -12,6 +12,7 @@
   }
 , "devDependencies" :
   { "typescript" : "*"
-	, "mocha": "^2.4.5"
+	, "mocha": "^2.4.5",
+  , "bluebird": "^3.3.5"
   }
 }
