@@ -15,7 +15,7 @@ describe("Test", () => {
 	it("async 1d optimization of x => sin(x / 100) should converge", done => {
 		let thetaPromise : Promise<number[]>
 
-		function run(i = 1, theta = [0]) {
+		const run = (i = 1, theta = [0]) => {
 			thetaPromise = lib.iteration(x => new Promise<number>(resolve => resolve(Math.sin(x[0] / 3))), theta, -1.3 * 10 / i)
 			thetaPromise.then(t => {
 				let thetaNext = t.map((x => Math.round(x)))
