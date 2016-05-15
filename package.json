@@ -5,7 +5,10 @@
 , "repository" : "streamcode9/node-discrete-spsa"
 , "licence" : "WTFPL"
 , "files" : [ "README.md", "lib" ]
-, "scripts" : { "prepublish" : "tsc" }
+, "scripts" :
+  { "prepublish" : "tsc"
+  , "test": "./node_modules/mocha/bin/mocha"
+  }
 , "main" : "lib/app.js"
 , "dependencies":
   {
