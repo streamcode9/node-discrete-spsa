@@ -1,4 +1,5 @@
 ﻿// Main library module
+import Promise = require('bluebird')
 
 function bernoulli() { return Math.random() > 0.5 ? 1 : -1 }
 

@@ -1,4 +1,5 @@
 import assert = require('assert')
+import Promise = require('bluebird')
 import lib = require('./app')
 
 describe("Test", () => {
