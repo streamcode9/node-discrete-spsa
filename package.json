@@ -7,7 +7,7 @@
 , "files" : [ "README.md", "lib" ]
 , "scripts" :
   { "prepublish" : "tsc"
-  , "test": "mocha lib && npm run coverage"
+  , "test": "mocha lib"
   , "coverage" : "istanbul instrument --output lib-cov --no-compact --variable global.__coverage__ lib && ISTANBUL_REPORTERS=text-summary,lcovonly mocha --reporter mocha-istanbul lib-cov"
   }
 , "main" : "lib/app.js"

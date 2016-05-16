@@ -1,5 +1,8 @@
 language: node_js
-before_script: npm run prepublish
+script:
+    - npm run prepublish
+    - npm test
+    - npm run coverage
 node_js:
   - 6
   - 4
