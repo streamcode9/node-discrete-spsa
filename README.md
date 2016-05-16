@@ -1,4 +1,4 @@
-# discrete-spsa
+# discrete-spsa [![Build Status](https://travis-ci.org/streamcode9/node-discrete-spsa.svg?branch=master)](https://travis-ci.org/streamcode9/node-discrete-spsa)
 
 An implementation of the Discrete Simultaneous Perturbation Stochastic Aproximation algorithm.
 
