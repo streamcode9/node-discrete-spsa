@@ -1,3 +1,6 @@
+# Istanbul coverage data
+lcov.info
+lib-cov
 # Vi editor temporaries:
 *.swp
 *.swo
