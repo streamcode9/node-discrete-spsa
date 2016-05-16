@@ -3,7 +3,7 @@
 , "description" : "Discrete Simultaneous Perturbation Stochastic Approximation algorithm by Hill, 2005"
 , "keywords" : [ "optimization", "stochastic", "algorithm", "multidimentional", "discrete" ]
 , "repository" : "streamcode9/node-discrete-spsa"
-, "licence" : "WTFPL"
+, "license" : "WTFPL"
 , "files" : [ "README.md", "lib" ]
 , "scripts" :
   { "prepublish" : "tsc"
