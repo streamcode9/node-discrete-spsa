@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>c2b50a90-e4cd-4b8e-b100-2cdc0348a6f8</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.ts</StartupFile>
+    <StartupFile>Examples\ping\example-ping.ts</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -35,6 +35,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <Content Include="package.json" />
+    <TypeScriptCompile Include="Examples\ping\example-ping.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\bluebird.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\mocha.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
@@ -43,6 +44,8 @@
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Examples\" />
+    <Folder Include="Examples\ping\" />
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
     <Folder Include="Scripts\typings\node\" />

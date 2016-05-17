@@ -1,5 +1,6 @@
 ﻿// Main library module
 import Promise = require('bluebird')
+import assert = require('assert')
 
 function bernoulli() { return Math.random() > 0.5 ? 1 : -1 }
 
@@ -15,11 +16,25 @@ export function iterationSync(f: (values: number[]) => number, theta: number[], 
 
 export function iteration(f: (...args: any[]) => Promise<number>, theta: number[], a: number) : Promise<number[]> {
 	var delta = theta.map(bernoulli)
-	var ysPromises = [f.apply(null, [vector_add(theta, delta)]), f.apply(null, [vector_sub(theta, delta)])]	
-	return new Promise<number[]>(function(resolve) {
-		Promise.all(ysPromises).then(function(ys) {
-			var gradient = scale(delta, (ys[0] - ys[1]) / 2 * a)
-			resolve(vector_sub(theta, gradient))
-		})
+	var xs = [[vector_add(theta, delta)], [vector_sub(theta, delta)]]	
+	return Promise.mapSeries(xs, x => f.apply(null, x)).then(ys => {
+		var gradient = scale(delta, (ys[0] - ys[1]) / 2 * a)
+		return vector_sub(theta, gradient)
 	})
+}
+
+export function projectMinMax(min: number[], current: number[], max: number[]): number[] {
+	assert.equal(min.length, current.length)
+	assert.equal(current.length, max.length)
+
+	if (current[0] < min[0]) current[0] = min[0]
+	if (current[1] < min[1]) current[1] = min[1]
+	if (current[0] > max[0]) current[0] = max[0]
+	if (current[1] > max[1]) current[1] = max[0]
+
+	return current
+}
+
+export function round(values: number[]) {
+	return values.map(x => Math.round(x))
 }
