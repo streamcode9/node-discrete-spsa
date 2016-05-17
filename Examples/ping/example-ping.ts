@@ -1,6 +1,6 @@
 ﻿import Promise = require('bluebird')
 import lib = require('../../app')
-var ab = require('abraxas')
+const ab = require('abraxas')
 
 ab.Server.listen()
 
@@ -9,7 +9,7 @@ const jobsCount = 100
 
 function pushJobs(jobsCount: number, client: any, tube: string) {
 	let jobs: any[] = []
-	for (var i = 0; i < jobsCount; i++) jobs.push(client.submitJob(tube, 'abc'))
+	for (let i = 0; i < jobsCount; i++) jobs.push(client.submitJob(tube, 'abc'))
 	return Promise.all(jobs)
 }
 
@@ -21,7 +21,7 @@ function createClient(maxJobs: number, maxQueued: number, tube: string) {
 	return client
 }
 
-function ping(maxJobs: number, maxQueued: number, tube: string): Promise<number> {
+function ping(maxJobs: number, maxQueued: number, tube: string) : Promise<number> {
 	const client = createClient(maxJobs, maxQueued, tube)
 
 	return new Promise<number>(resolve => {
