@@ -27,12 +27,7 @@ export function projectMinMax(min: number[], current: number[], max: number[]) :
 	assert.equal(min.length, current.length)
 	assert.equal(current.length, max.length)
 
-	if (current[0] < min[0]) current[0] = min[0]
-	if (current[1] < min[1]) current[1] = min[1]
-	if (current[0] > max[0]) current[0] = max[0]
-	if (current[1] > max[1]) current[1] = max[0]
-
-	return current
+	return current.map((value, i) => Math.min(value, max[i])).map((value, i) => Math.max(value, min[i]))
 }
 
 export function round(values: number[]) {
