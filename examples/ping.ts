@@ -1,5 +1,5 @@
 ﻿import Promise = require('bluebird')
-import lib = require('../../app')
+import lib = require('../app')
 const ab = require('abraxas')
 
 ab.Server.listen()
