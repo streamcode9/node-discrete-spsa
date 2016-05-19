@@ -6,7 +6,7 @@ describe('Test', () => {
 	it('1d optimization of x => sin(x / 100) should converge', () => {
 		let theta = [0]
 		for (let i = 1; i < 25; i++) {
-			theta = lib.round(lib.iterationSync(x => Math.sin(x[0] / 3), theta, -1.3 * 10 / i))
+			theta = lib.round(lib.iterationSync((x: number) => Math.sin(x / 3), theta, -1.3 * 10 / i))
 		}
 
 		assert.ok(theta[0] === 4 || theta[0] === 5)
@@ -14,7 +14,7 @@ describe('Test', () => {
 
 	it('async 1d optimization of x => sin(x / 100) should converge', done => {
 		const run = (i = 1, theta = [0]) => {
-			lib.iteration(x => new Promise<number>(resolve => resolve(Math.sin(x[0] / 3))), theta, -1.3 * 10 / i)
+			lib.iteration(x => new Promise<number>(resolve => resolve(Math.sin(x / 3))), theta, -1.3 * 10 / i)
 				.then(t => {
 					let thetaNext = lib.round(t)
 					if (i < 25) run(i + 1, thetaNext)
