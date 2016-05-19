@@ -57,4 +57,4 @@ function ping(maxJobs: number, pageSize: number): Promise<number> {
 	})
 }
 
-common.run(5, ping, [2, 2], 100)
+lib.optimize(5, ping, [2, 2], 100)

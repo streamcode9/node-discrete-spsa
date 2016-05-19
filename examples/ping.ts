@@ -33,4 +33,4 @@ function ping(maxJobs: number, maxQueued: number) : Promise<number> {
 	})
 }
 
-common.run(5, ping, [100, 100], 100)
+lib.optimize(5, ping, [100, 100], 100)

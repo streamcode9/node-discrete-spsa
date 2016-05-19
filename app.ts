@@ -33,3 +33,20 @@ export function projectMinMax(min: number[], current: number[], max: number[]) :
 export function round(values: number[]) {
 	return values.map(x => Math.round(x))
 }
+
+function fix(t: number[]) {
+	return projectMinMax([2, 2], round(t), [1000, 1000])
+}
+
+function fixAndApply(f: (x: number[]) => Promise<number>) {
+	return (...args: number[]) => f.apply(null, fix(args))
+}
+
+export function optimize(cyclesCount: number = 5, f: (...args: any[]) => Promise<number>, theta: number[] = [2, 2], a: number = -100) {	
+	iteration(fixAndApply(f), theta, a)
+		.done(t => {
+			const thetaNext = fix(t)
+			if (cyclesCount > 0) optimize(--cyclesCount, f, thetaNext, a)
+			else console.log('Optimal values = ', thetaNext)
+		})
+}

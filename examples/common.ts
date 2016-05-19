@@ -15,20 +15,3 @@ export function pushJobs(tube: string, jobsCount: number, client: any, generateJ
 	for (let i = 0; i < jobsCount; i++) jobs.push(client.submitJob(tube, generateJobPayload()))
 	return Promise.all(jobs)
 }
-
-function fix(t: number[]) {
-	return lib.projectMinMax([2, 2], lib.round(t), [1000, 1000])
-}
-
-function fixAndApply(f: (x: number[]) => Promise<number>) {
-	return (...args: number[]) => f.apply(null, fix(args))
-}
-
-export function run(cyclesCount: number = 5, f: (...args: any[]) => Promise<number>, theta: number[] = [2, 2], a: number = -100) {	
-	lib.iteration(fixAndApply(f), theta, a)
-		.done(t => {
-			const thetaNext = fix(t)
-			if (cyclesCount > 0) run(--cyclesCount, f, thetaNext, a)
-			else console.log('Optimal values = ', thetaNext)
-		})
-}
