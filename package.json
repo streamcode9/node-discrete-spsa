@@ -9,7 +9,7 @@
   { "prepublish" : "tsc"
   , "test": "mocha lib"
   , "coverage" : "istanbul instrument --output lib-cov --no-compact --variable global.__coverage__ lib && ISTANBUL_REPORTERS=text-summary,lcovonly mocha --reporter mocha-istanbul lib-cov"
-  , "tslint" : "tslint *.ts"
+  , "tslint" : "tslint *.ts examples/*.ts"
   }
 , "main" : "lib/app.js"
 , "dependencies":
