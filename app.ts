@@ -6,21 +6,28 @@ function bernoulli() { return Math.random() > 0.5 ? 1 : -1 }
 
 function vector_add(a: number[], b: number[]) { return a.map((ai, i) => ai + b[i]) }
 function vector_sub(a: number[], b: number[]) { return a.map((ai, i) => ai - b[i]) }
-function scale(a: number[], n: number) { return a.map((x) => x * n) }
 
-export function iterationSync(f: (...args: number[]) => number, theta: number[], a: number) {
+function perturb(theta: number[], a: number) {
 	const delta = theta.map(bernoulli)
-	const gradient = scale(delta, (f.apply(null, vector_add(theta, delta)) - f.apply(null, vector_sub(theta, delta))) / 2 * a)
-	return vector_sub(theta, gradient)
+	return {
+		xs: [vector_add(theta, delta), vector_sub(theta, delta)],
+		step: (ys: number[]) =>
+			vector_sub(theta, delta.map(x => x * (ys[0] - ys[1]) / 2 * a))
+	}
 }
 
-export function iteration(f: (...args: any[]) => Promise<number>, theta: number[], a: number) : Promise<number[]> {
-	const delta = theta.map(bernoulli)
-	const xs = [vector_add(theta, delta), vector_sub(theta, delta)]
-	return Promise.mapSeries(xs, x => f.apply(null, x)).then(ys => {
-		const gradient = scale(delta, (ys[0] - ys[1]) / 2 * a)
-		return vector_sub(theta, gradient)
-	})
+function passArray(f: (...args: number[]) => (number | Promise<number>)) {
+	return (x: number[]) => f.apply(null, x)
+}
+
+export function iterationSync(f: (...args: number[]) => number, theta: number[], a: number) {
+	const {xs, step} = perturb(theta, a)
+	return step(xs.map(passArray(f)))
+}
+
+export function iteration(f: (...args: number[]) => Promise<number>, theta: number[], a: number) : Promise<number[]> {
+	const {xs, step} = perturb(theta, a)
+	return Promise.mapSeries(xs, passArray(f)).then(step)
 }
 
 export function projectMinMax(min: number[], current: number[], max: number[]) : number[] {
@@ -38,11 +45,11 @@ function fix(t: number[]) {
 	return projectMinMax([2, 2], round(t), [1000, 1000])
 }
 
-function fixAndApply(f: (x: number[]) => Promise<number>) {
+function fixAndApply(f: (...args: number[]) => Promise<number>) {
 	return (...args: number[]) => f.apply(null, fix(args))
 }
 
-export function optimize(cyclesCount: number = 5, f: (...args: any[]) => Promise<number>, theta: number[] = [2, 2], a: number = -100) {	
+export function optimize(cyclesCount: number, f: (...args: number[]) => Promise<number>, theta: number[], a: number) {
 	iteration(fixAndApply(f), theta, a)
 		.done(t => {
 			const thetaNext = fix(t)
