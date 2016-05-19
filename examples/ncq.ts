@@ -2,11 +2,12 @@
 import fs = require('fs')
 import Promise = require('bluebird')
 import lib = require('../app')
+import common = require('./common')
 const ab = require('abraxas')
 
 ab.Server.listen()
 
-const tubeName = 'test_tube'
+const tube = 'test_tube'
 const jobsCount = 10
 
 const fd = fs.openSync('123.txt', 'r')
@@ -24,63 +25,36 @@ function readPageFromFile(pageSize: number, pageNo: number) : Promise<Buffer> {
 	})
 }
 
-function pushJobs(jobsCount: number, client: any, tube: string, pageSize: number) {
-
+function generateJobPayload(pageSize: number) {
 	pageSize *= 65536
 	const pageCount = Math.floor(fileSize / pageSize)
 	assert(jobsCount > 0)
 	assert(pageCount > 100, 'low page count')
-	const jobs: Promise<any>[] = []
-	for (let i = 0; i < jobsCount; i++) {
-		const pageNo = Math.floor(Math.random() * pageCount)
-		assert(pageNo * pageSize < fileSize, 'offset out of range')
-		assert(pageNo >= 0 && pageNo < pageCount)
-		jobs.push(client.submitJob(tube, JSON.stringify({pageNo, pageSize})))
-	}
-	return Promise.all(jobs)
+
+	const pageNo = Math.floor(Math.random() * pageCount)
+	assert(pageNo * pageSize < fileSize, 'offset out of range')
+	assert(pageNo >= 0 && pageNo < pageCount)
+
+	return JSON.stringify({ pageNo, pageSize })
 }
 
-function createClient(tube: string, maxJobs: number, maxQueued: number, pageSize: number) {
-	const client = ab.Client.connect({ maxJobs: maxJobs, maxQueued: maxQueued })
-	client.registerWorker(tube, (job: any) => {
+function ping(maxJobs: number, pageSize: number): Promise<number> {
+	const maxQueued = 1
+	const client = common.createClient(tube, maxJobs, maxQueued, (job) => {
 		const { pageSize, pageNo } = JSON.parse(job.payload)
 		readPageFromFile(pageSize, pageNo).then(data => job.end(data))
 	})
-	return client
-}
 
-
-let tube = tubeName
-function ping(maxJobs: number, pageSize: number) : Promise<number> {
-	const maxQueued = 1
-	const client = createClient(tube, maxJobs, maxQueued, pageSize)
-
-	return pushJobs(jobsCount, client, tube, pageSize).then(() => {
+	return common.pushJobs(tube, jobsCount, client, generateJobPayload.bind(null, pageSize)).then(() => {
 		const start = Date.now()
-		return pushJobs(jobsCount, client, tube, pageSize).then(() => {
+		return common.pushJobs(tube, jobsCount, client, generateJobPayload.bind(null, pageSize)).then(() => {
 			client.forgetAllWorkers()
 			client.disconnect()
 			const speed = (jobsCount * pageSize) / (Date.now() - start)
-			console.log({maxJobs, pageSize, speed : speed.toPrecision(2)})
+			console.log({ maxJobs, pageSize, speed: speed.toPrecision(2) })
 			return speed
 		})
 	})
 }
 
-function fix(t: number[]) {
-	return lib.projectMinMax([2, 2], lib.round(t), [1000, 1000])
-}
-
-function fixedPing(...args: number[]) {
-	return ping.apply(null, fix(args))
-}
-
-function run(i: number = 1, theta: number[] = [2, 2]) {
-	lib.iteration(fixedPing, theta, -100)
-		.done(t => {
-			const thetaNext = fix(t)
-			if (i < 25000) run(i + 1, thetaNext)
-			else console.log('DONE')
-		})
-}
-run()
+common.run(5, ping, [2, 2], 100)
