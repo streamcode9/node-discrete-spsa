@@ -1,4 +1,5 @@
-﻿import fs = require('fs')
+﻿import assert = require('assert')
+import fs = require('fs')
 import Promise = require('bluebird')
 import lib = require('../app')
 const ab = require('abraxas')
@@ -8,53 +9,78 @@ ab.Server.listen()
 const tubeName = 'test_tube'
 const jobsCount = 10
 
-function readPageFromFile(pageSize: number) : Promise<Buffer> {	
+const fd = fs.openSync('123.txt', 'r')
+const fileSize = fs.fstatSync(fd).size
+assert(fileSize > 100 * 1024 * 1024, 'size is less than 100 MBs')
+
+function readPageFromFile(pageSize: number, pageNo: number) : Promise<Buffer> {
+	assert(pageSize > 0)
 	return new Promise<Buffer>(resolve => {
-		fs.open('123.txt', 'r', (err, fd) => {
-			fs.read(fd, new Buffer(pageSize), 0, pageSize, 0, (err, bytesRead, buffer) => {
-				fs.close(fd, (err) => resolve(buffer))
-			})
+		fs.read(fd, new Buffer(pageSize), 0, pageSize, pageNo * pageSize, (err, bytesRead, buffer) => {
+			assert.equal(err, null)
+			assert.equal(bytesRead, pageSize, 'cannot read')
+			resolve(buffer)
 		})
 	})
 }
 
-function pushJobs(jobsCount: number, client: any, tube: string) {
-	let jobs: any[] = []
-	for (let i = 0; i < jobsCount; i++) jobs.push(client.submitJob(tube, 'abc'))
+function pushJobs(jobsCount: number, client: any, tube: string, pageSize: number) {
+
+	pageSize *= 65536
+	const pageCount = Math.floor(fileSize / pageSize)
+	assert(jobsCount > 0)
+	assert(pageCount > 100, 'low page count')
+	const jobs: Promise<any>[] = []
+	for (let i = 0; i < jobsCount; i++) {
+		const pageNo = Math.floor(Math.random() * pageCount)
+		assert(pageNo * pageSize < fileSize, 'offset out of range')
+		assert(pageNo >= 0 && pageNo < pageCount)
+		jobs.push(client.submitJob(tube, JSON.stringify({pageNo, pageSize})))
+	}
 	return Promise.all(jobs)
 }
 
 function createClient(tube: string, maxJobs: number, maxQueued: number, pageSize: number) {
 	const client = ab.Client.connect({ maxJobs: maxJobs, maxQueued: maxQueued })
 	client.registerWorker(tube, (job: any) => {
-		readPageFromFile(pageSize).then(data => job.end(data))
+		const { pageSize, pageNo } = JSON.parse(job.payload)
+		readPageFromFile(pageSize, pageNo).then(data => job.end(data))
 	})
 	return client
 }
 
-function ping(tube: string, maxJobs: number, maxQueued: number, pageSize: number) : Promise<number> {
+
+let tube = tubeName
+function ping(maxJobs: number, pageSize: number) : Promise<number> {
+	const maxQueued = 1
 	const client = createClient(tube, maxJobs, maxQueued, pageSize)
 
-	return new Promise<number>(resolve => {
-		pushJobs(jobsCount, client, tube).then(() => {
-			const start = Date.now()
-			pushJobs(jobsCount, client, tube).then(() => {
-				client.forgetAllWorkers()
-				client.disconnect()
-				const speed = (Date.now() - start) / jobsCount
-				resolve(speed)
-			})
+	return pushJobs(jobsCount, client, tube, pageSize).then(() => {
+		const start = Date.now()
+		return pushJobs(jobsCount, client, tube, pageSize).then(() => {
+			client.forgetAllWorkers()
+			client.disconnect()
+			const speed = (jobsCount * pageSize) / (Date.now() - start)
+			console.log({maxJobs, pageSize, speed : speed.toPrecision(2)})
+			return speed
 		})
 	})
 }
 
-const run = (i: number = 1, theta: number[] = [100, 100, 100]) => {
-	lib.iteration(x => ping(tubeName, theta[0], theta[1], theta[2]), theta, 100)
-		.then(t => {
-			let thetaNext = lib.projectMinMax([10, 10, 10], lib.round(t), [1000, 1000, 1000])
-			console.log(thetaNext)
-			if (i < 25) run(i + 1, thetaNext)
-			else console.log('DONE!!! maxJobs =', thetaNext[0], 'maxQueued=', thetaNext[1], 'pageSize=', thetaNext[2])
+function fix(t: number[]) {
+	return lib.projectMinMax([2, 2], lib.round(t), [1000, 1000])
+}
+
+function fixedPing(...args: number[]) {
+	return ping.apply(null, fix(args))
+}
+
+function run(i: number = 1, theta: number[] = [2, 2]) {
+	lib.iteration(fixedPing, theta, -100)
+		.done(t => {
+			const thetaNext = fix(t)
+			if (i < 25000) run(i + 1, thetaNext)
+			else console.log('DONE')
 		})
 }
 run()
