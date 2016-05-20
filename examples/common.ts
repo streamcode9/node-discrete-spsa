@@ -15,13 +15,10 @@ export function run(opts: any) {
 		opts.onJob(job.payload).done((result: Buffer | string) => job.end(result))
 	})
 
-	const pushJobs = () => {
-		const jobs: Promise<any>[] = []
-		for (let i = 0; i < opts.jobsCount; i++) {
-			jobs.push(client.submitJob(tube, opts.emitJob()))
-		}
-		return Promise.all(jobs)
-	}
+	const pushJobs = () => Promise.all(lib.pushN(
+			opts.jobsCount
+		,	() => client.submitJob(tube, opts.emitJob()))
+	)
 
 	return pushJobs().then(() => {
 		const start = Date.now()

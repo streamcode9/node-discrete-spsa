@@ -49,9 +49,11 @@ function fixAndApply(f: (...args: number[]) => Promise<number>) {
 	return (...args: number[]) => f.apply(null, fix(args))
 }
 
-function pushN(n: number, val: any = null ) {
+export function constNull() : any { return null }
+
+export function pushN(n: number, val: () => any = constNull ) {
 	const a: any[] = []
-	for (let i = 0; i < n; i++) a.push(val)
+	for (let i = 0; i < n; i++) a.push(val())
 	return a
 }
 
