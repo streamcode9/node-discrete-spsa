@@ -1,4 +1,4 @@
-# discrete-spsa [![Build Status]](https://travis-ci.org/streamcode9/node-discrete-spsa) [![Dependency Status]](https://david-dm.org/streamcode9/node-discrete-spsa) [![devDependency Status]] (https://david-dm.org/streamcode9/node-discrete-spsa#info=devDependencies)
+# discrete-spsa [![Build Status]](https://travis-ci.org/streamcode9/node-discrete-spsa) [![Dependency Status]](https://david-dm.org/streamcode9/node-discrete-spsa) [![devDependency Status]] (https://david-dm.org/streamcode9/node-discrete-spsa#info=devDependencies) [![Code Climate](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/gpa.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa) [![Test Coverage](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/coverage.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa/coverage) [![Issue Count](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/issue_count.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa)
 
 An implementation of the Discrete Simultaneous Perturbation Stochastic Aproximation algorithm.
 
