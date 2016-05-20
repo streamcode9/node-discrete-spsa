@@ -22,5 +22,6 @@
   , "istanbul" : "*"
   , "mocha-istanbul" : "*"
   , "tslint" : "*"
+  , "codeclimate-test-reporter": "^0.3.1"
   }
 }
