@@ -10,10 +10,9 @@ function generateJobPayload() {
 }
 
 function ping(maxJobs: number, maxQueued: number) : Promise<number> {
-	const onJob = (job: any) => {
-		const payload = job.payload.toString()
+	const onJob = (payload: string) => {
 		assert.equal(payload, 'abc')
-		setTimeout(() => job.end(job.payload.toString().toUpperCase()), 20)
+		return Promise.delay(20).then(() => payload.toUpperCase())
 	}
 	console.log(arguments)
 	let calcSpeed = (timeMs: number) => timeMs / jobsCount

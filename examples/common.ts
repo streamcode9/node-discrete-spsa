@@ -10,8 +10,10 @@ const tube = 'test_tube'
 export function run(opts: any) {
 	assert(opts.jobsCount > 0)
 
-	const client = ab.Client.connect({ maxJobs: opts.maxJobs, maxQueued: opts.maxQueued })
-	client.registerWorker(tube, opts.onJob)
+	const client = ab.Client.connect({ maxJobs: opts.maxJobs, maxQueued: opts.maxQueued, defaultEncoding: 'utf8' })
+	client.registerWorker(tube, (job: any) => {
+		opts.onJob(job.payload).done((result: Buffer | string) => job.end(result))
+	})
 
 	const pushJobs = () => {
 		const jobs: Promise<any>[] = []

@@ -10,7 +10,8 @@ const fd = fs.openSync('123.txt', 'r')
 const fileSize = fs.fstatSync(fd).size
 assert(fileSize > 100 * 1024 * 1024, 'size is less than 100 MBs')
 
-function readPageFromFile(pageSize: number, pageNo: number) : Promise<Buffer> {
+function onJob(payload: string) : Promise<Buffer> {
+	const { pageSize, pageNo } = JSON.parse(payload)
 	assert(pageSize > 0)
 	return new Promise<Buffer>(resolve => {
 		fs.read(fd, new Buffer(pageSize), 0, pageSize, pageNo * pageSize, (err, bytesRead, buffer) => {
@@ -36,10 +37,6 @@ function generateJobPayload(pageSize: number) {
 
 function ping(maxJobs: number, pageSize: number) : Promise<number> {
 	const maxQueued = 1
-	const onJob = (job: any) => {
-		const { pageSize, pageNo } = JSON.parse(job.payload)
-		readPageFromFile(pageSize, pageNo).then(data => job.end(data))
-	}
 
 	let calcSpeed = (timeMs: number) => {
 		const speed = (jobsCount * pageSize) / timeMs
