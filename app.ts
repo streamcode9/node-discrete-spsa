@@ -41,14 +41,6 @@ export function round(values: number[]) {
 	return values.map(x => Math.round(x))
 }
 
-function fix(t: number[]) {
-	return projectMinMax([2, 2], round(t), [1000, 1000])
-}
-
-function fixAndApply(f: (...args: number[]) => Promise<number>) {
-	return (...args: number[]) => f.apply(null, fix(args))
-}
-
 export function constNull() : any { return null }
 
 export function pushN(n: number, val: () => any = constNull ) {
@@ -57,9 +49,9 @@ export function pushN(n: number, val: () => any = constNull ) {
 	return a
 }
 
-export function optimize(cyclesCount: number, f: (...args: number[]) => Promise<number>, theta: number[], a: number) {
+export function optimize(cyclesCount: number, f: (...args: number[]) => Promise<number>, theta: number[], a: number, fix: (theta: number[]) => number[]) {
 	let thetaNext = theta
-	let ff = fixAndApply(f)
+	let ff = (...args: number[]) => f.apply(null, fix(args))
 	return Promise.mapSeries(pushN(cyclesCount), () =>
 		iteration(ff, thetaNext, a)
 		.then(t => {

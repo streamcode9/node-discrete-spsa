@@ -21,7 +21,17 @@ function ping(maxJobs: number, maxQueued: number) : Promise<number> {
 				assert.equal(payload, 'abc')
 				return Promise.delay(20).then(() => payload.toUpperCase())
 			}
-		})
+		}
+	)
 }
 
-lib.optimize(5, ping, [100, 100], -100).done(console.log)
+let iters = {
+	min            : [   2,    2 ]
+	, initialGuess : [ 100,  100 ]
+	, max          : [1000, 1000 ]
+	, iterations   : 5
+	, learningRate : -100
+	, fn : ping
+	}
+
+lib.optimize(iters.iterations, iters.fn, iters.initialGuess, iters.learningRate, (current) => lib.projectMinMax(iters.min, lib.round(current), iters.max)).done(console.log)

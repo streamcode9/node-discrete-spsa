@@ -50,4 +50,13 @@ function ping(maxJobs: number, pageSize: number) : Promise<number> {
 	)
 }
 
-lib.optimize(10, ping, [2, 2], -100).done(x => console.log(x))
+const iters = {
+	min            : [   2,    2 ]
+	, initialGuess : [   2,    2 ]
+	, max          : [1000, 1000 ]
+	, iterations   : 10
+	, learningRate : -100
+	, fn : ping
+	}
+
+lib.optimize(iters.iterations, iters.fn, iters.initialGuess, iters.learningRate, (current) => lib.projectMinMax(iters.min, lib.round(current), iters.max)).done(console.log)
