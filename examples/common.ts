@@ -13,19 +13,19 @@ export function createClient(opts: { maxJobs: number, maxQueued: number}, onJobD
 	return client
 }
 
-export function pushJobs(jobsCount: number, client: any, generateJobPayload: () => any) {
-	assert(jobsCount > 0)	
-	const jobs: Promise<any>[] = []
-	for (let i = 0; i < jobsCount; i++) jobs.push(client.submitJob(tube, generateJobPayload()))
-	return Promise.all(jobs)
-}
-
 export function run(opts: any) {
-	let run = () => pushJobs(opts.jobsCount, opts.client, opts.generateJobPayload)
+	assert(opts.jobsCount > 0)
+	const pushJobs = () => {
+		const jobs: Promise<any>[] = []
+		for (let i = 0; i < opts.jobsCount; i++) {
+			jobs.push(opts.client.submitJob(tube, opts.generateJobPayload()))
+		}
+		return Promise.all(jobs)
+	}
 
-	return run().then(() => {
+	return pushJobs().then(() => {
 		const start = Date.now()
-		return run().then(() => {
+		return pushJobs().then(() => {
 			opts.client.forgetAllWorkers()
 			opts.client.disconnect()
 			return opts.calcSpeed(Date.now() - start)

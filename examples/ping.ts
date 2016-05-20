@@ -5,7 +5,7 @@ import common = require('./common')
 
 const jobsCount = 100
 
-function generateJobsPayload() {
+function generateJobPayload() {
 	return 'abc'
 }
 
@@ -16,17 +16,9 @@ function ping(maxJobs: number, maxQueued: number) : Promise<number> {
 		setTimeout(() => job.end(job.payload.toString().toUpperCase()), 20) 
 	})
 	console.log(arguments)
-	return new Promise<number>(resolve => {
-		common.pushJobs(jobsCount, client, generateJobsPayload).then(() => {
-			const start = Date.now()
-			common.pushJobs(jobsCount, client, generateJobsPayload).then(() => {
-				client.forgetAllWorkers()
-				client.disconnect()
-				const speed = (Date.now() - start) / jobsCount
-				resolve(speed)
-			})
-		})
-	})
+	let calcSpeed = (timeMs: number) => timeMs / jobsCount
+
+	return common.run({ jobsCount, client, calcSpeed, generateJobPayload})
 }
 
-lib.optimize(5, ping, [100, 100], 100).done(console.log)
+lib.optimize(5, ping, [100, 100], -100).done(console.log)
