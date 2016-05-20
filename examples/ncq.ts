@@ -36,17 +36,17 @@ function generateJobPayload(pageSize: number) {
 
 function ping(maxJobs: number, pageSize: number) : Promise<number> {
 	const maxQueued = 1
-	const client = common.createClient({maxJobs, maxQueued}, (job) => {
+	const onJob = (job: any) => {
 		const { pageSize, pageNo } = JSON.parse(job.payload)
 		readPageFromFile(pageSize, pageNo).then(data => job.end(data))
-	})
+	}
 
 	let calcSpeed = (timeMs: number) => {
 		const speed = (jobsCount * pageSize) / timeMs
 		console.log({ maxJobs, pageSize, speed: speed.toPrecision(2) })
 		return speed
 	}
-	return common.run({ jobsCount, client, calcSpeed, generateJobPayload : generateJobPayload.bind(null, pageSize) })
+	return common.run({ onJob, maxJobs, maxQueued, jobsCount, calcSpeed, generateJobPayload : generateJobPayload.bind(null, pageSize) })
 }
 
 lib.optimize(10, ping, [2, 2], -100).done(x => console.log(x))

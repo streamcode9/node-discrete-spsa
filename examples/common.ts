@@ -7,18 +7,16 @@ ab.Server.listen()
 
 const tube = 'test_tube'
 
-export function createClient(opts: { maxJobs: number, maxQueued: number}, onJobDone: (job: any) => void) {
-	const client = ab.Client.connect(opts)
-	client.registerWorker(tube, onJobDone)
-	return client
-}
-
 export function run(opts: any) {
 	assert(opts.jobsCount > 0)
+
+	const client = ab.Client.connect({ maxJobs: opts.maxJobs, maxQueued: opts.maxQueued })
+	client.registerWorker(tube, opts.onJob)
+
 	const pushJobs = () => {
 		const jobs: Promise<any>[] = []
 		for (let i = 0; i < opts.jobsCount; i++) {
-			jobs.push(opts.client.submitJob(tube, opts.generateJobPayload()))
+			jobs.push(client.submitJob(tube, opts.generateJobPayload()))
 		}
 		return Promise.all(jobs)
 	}
@@ -26,8 +24,8 @@ export function run(opts: any) {
 	return pushJobs().then(() => {
 		const start = Date.now()
 		return pushJobs().then(() => {
-			opts.client.forgetAllWorkers()
-			opts.client.disconnect()
+			client.forgetAllWorkers()
+			client.disconnect()
 			return opts.calcSpeed(Date.now() - start)
 		})
 	})
