@@ -18,7 +18,7 @@ export function run(opts: any) {
 	const pushJobs = () => {
 		const jobs: Promise<any>[] = []
 		for (let i = 0; i < opts.jobsCount; i++) {
-			jobs.push(client.submitJob(tube, opts.generateJobPayload()))
+			jobs.push(client.submitJob(tube, opts.emitJob()))
 		}
 		return Promise.all(jobs)
 	}
