@@ -57,4 +57,4 @@ function ping(maxJobs: number, pageSize: number): Promise<number> {
 	})
 }
 
-lib.optimize(5, ping, [2, 2], 100)
+lib.optimize(10, ping, [2, 2], -100).done(x => console.log(x))

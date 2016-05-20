@@ -49,11 +49,20 @@ function fixAndApply(f: (...args: number[]) => Promise<number>) {
 	return (...args: number[]) => f.apply(null, fix(args))
 }
 
+function pushN(n: number, val: any = null ) {
+	const a: any[] = []
+	for (let i = 0; i < n; i++) a.push(val)
+	return a
+}
+
 export function optimize(cyclesCount: number, f: (...args: number[]) => Promise<number>, theta: number[], a: number) {
-	iteration(fixAndApply(f), theta, a)
-		.done(t => {
-			const thetaNext = fix(t)
-			if (cyclesCount > 0) optimize(--cyclesCount, f, thetaNext, a)
-			else console.log('Optimal values = ', thetaNext)
+	let thetaNext = theta
+	let ff = fixAndApply(f)
+	return Promise.mapSeries(pushN(cyclesCount), () =>
+		iteration(ff, thetaNext, a)
+		.then(t => {
+			thetaNext = t
+			return fix(thetaNext)
 		})
+	)
 }
