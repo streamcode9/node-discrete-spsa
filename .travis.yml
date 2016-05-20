@@ -11,6 +11,6 @@ node_js:
   - "0.10"
 addons:
   code_climate:
-    repo_token: 5736c9c4187f1900730034ce
+    repo_token: b5e7fa064639c14775326edb8d1b6ad1aa7e78055a7c14ee590e569e07ad43e8
 after_script:
   - codeclimate-test-reporter < lcov.info
