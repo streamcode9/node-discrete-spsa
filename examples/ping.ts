@@ -25,13 +25,17 @@ function ping(maxJobs: number, maxQueued: number) : Promise<number> {
 	)
 }
 
-let iters = {
+const iters = {
 	min            : [   2,    2 ]
-	, initialGuess : [ 100,  100 ]
 	, max          : [1000, 1000 ]
-	, iterations   : 5
-	, learningRate : -100
-	, fn : ping
-	}
+}
 
-lib.optimize(iters.iterations, iters.fn, iters.initialGuess, iters.learningRate, (current) => lib.projectMinMax(iters.min, lib.round(current), iters.max)).done(console.log)
+const optimizationParams = {
+	iterations     : 5
+	, fn           : ping
+	, initialGuess : [100, 100]
+	, learningRate : -100
+	, fix          : (current: number[]) => lib.projectMinMax(iters.min, lib.round(current), iters.max)
+}
+
+lib.optimize(optimizationParams).done(console.log)

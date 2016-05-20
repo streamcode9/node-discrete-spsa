@@ -49,14 +49,23 @@ export function pushN(n: number, val: () => any = constNull ) {
 	return a
 }
 
-export function optimize(cyclesCount: number, f: (...args: number[]) => Promise<number>, theta: number[], a: number, fix: (theta: number[]) => number[]) {
-	let thetaNext = theta
-	let ff = (...args: number[]) => f.apply(null, fix(args))
-	return Promise.mapSeries(pushN(cyclesCount), () =>
-		iteration(ff, thetaNext, a)
-		.then(t => {
-			thetaNext = t
-			return fix(thetaNext)
+export interface OptimizationParameters {
+	iterations: number
+	fn: (...args: number[]) => Promise<number>
+	initialGuess: number[]
+	learningRate: number
+	fix: (theta: number[]) => number[]
+}
+
+export function optimize(params: OptimizationParameters) {
+	let { iterations, fn, initialGuess, learningRate, fix } = params
+	let nextGuess = initialGuess
+	let ff = (...args: number[]) => fn.apply(null, fix(args))
+	return Promise.mapSeries(pushN(iterations), () =>
+		iteration(ff, nextGuess, learningRate)
+		.then(guess => {
+			nextGuess = guess
+			return fix(nextGuess)
 		})
 	)
 }

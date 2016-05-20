@@ -52,11 +52,15 @@ function ping(maxJobs: number, pageSize: number) : Promise<number> {
 
 const iters = {
 	min            : [   2,    2 ]
-	, initialGuess : [   2,    2 ]
 	, max          : [1000, 1000 ]
-	, iterations   : 10
-	, learningRate : -100
-	, fn : ping
-	}
+}
 
-lib.optimize(iters.iterations, iters.fn, iters.initialGuess, iters.learningRate, (current) => lib.projectMinMax(iters.min, lib.round(current), iters.max)).done(console.log)
+const optimizationParams = {
+	iterations     : 10
+	, fn           : ping
+	, initialGuess : [2, 2]
+	, learningRate : -100
+	, fix          : (current: number[]) => lib.projectMinMax(iters.min, lib.round(current), iters.max)
+}
+
+lib.optimize(optimizationParams).done(console.log)
