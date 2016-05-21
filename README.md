@@ -1,4 +1,8 @@
-# discrete-spsa [![Build Status]](https://travis-ci.org/streamcode9/node-discrete-spsa) [![Dependency Status]](https://david-dm.org/streamcode9/node-discrete-spsa) [![devDependency Status]] (https://david-dm.org/streamcode9/node-discrete-spsa#info=devDependencies) [![Code Climate](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/gpa.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa) [![Test Coverage](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/coverage.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa/coverage) [![Issue Count](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/issue_count.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa)
+# discrete-spsa [![Build Status]](https://travis-ci.org/streamcode9/node-discrete-spsa) 
+
+[![Dependency Status]](https://david-dm.org/streamcode9/node-discrete-spsa) [![devDependency Status]] (https://david-dm.org/streamcode9/node-discrete-spsa#info=devDependencies) 
+
+[![Code Climate](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/gpa.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa) [![Test Coverage](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/coverage.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa/coverage) [![Issue Count](https://codeclimate.com/github/streamcode9/node-discrete-spsa/badges/issue_count.svg)](https://codeclimate.com/github/streamcode9/node-discrete-spsa)
 
 An implementation of the Discrete Simultaneous Perturbation Stochastic Aproximation algorithm.
 
@@ -17,13 +21,17 @@ Common examples of problems this algorithm is suitable for are finding buffer si
 counts in distributed systems, finding optimal memory and CPU frequency in overclocking scenarios
 and so on.
 
-## 0.1 Roadmap
+## 0.2 roadmap
+
+- Field-test with real problems
+
+## 0.1 (current)
 
 - Synchronous `spsa.iterateSync()`
 - Asynchronous `spsa.iterate()` (utilizes Bluebird promises)
 - High-level `spsa.optimize()`, asynchronous only
-- Disk seek concurrency optimization demo in `example/ncq`
-- Network buffering optimization demo in `example/ping` 
+- Disk seek concurrency optimization demo in `examples/ncq.ts`
+- Network buffering optimization demo in `example/ping.ts` 
 
 [pdf]: http://www.jhuapl.edu/SPSA/PDF-SPSA/Hill_TechDig05.pdf
 [Build Status]: https://travis-ci.org/streamcode9/node-discrete-spsa.svg?branch=master
