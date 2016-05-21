@@ -24,6 +24,7 @@ and so on.
 ## 0.2 roadmap
 
 - Field-test with real problems
+- Jupyter visualizations
 
 ## 0.1 (current)
 
