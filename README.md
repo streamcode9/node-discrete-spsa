@@ -21,6 +21,46 @@ Common examples of problems this algorithm is suitable for are finding buffer si
 counts in distributed systems, finding optimal memory and CPU frequency in overclocking scenarios
 and so on.
 
+## The Algorithm
+
+On each iteration:
+
+- a random direction of perturbation is chosen
+- the benchmark is run twice with a positive and a negative perturbation of current guess in that direction
+- the stochastic gradient is calculated from the benchmark results
+- the next guess is calculated by multiplying the gradient by the learning rate parameter
+
+In pseudo-code:
+
+```Javascript
+{ xs, step } = perturb(initialParameters, learningRate)
+ys[0] = benchmark(xs[0])
+ys[1] = benchmark(xs[1])
+improvedParameters = step(ys)
+```
+
+- Choose values for each parameter and feed them to the algorithm
+- Run the benchmark twice with the parameters suggested by the algorithm and collect the results
+- Feed the results to the algorithm to get the improved parameters
+- Use the improved parameters in next iteration
+- Stop when benchmark results stop to improve
+
+
+The `perturb()` function implements the algorithm. The rest of the library are wrappers to use it more easily.
+
+perturb() accepts `currentGuess[]` and `learningRate`, and returns `xs[]` and `step()` 
+ - `currentGuess`: an array numbers, current parameters
+ - `learningRate`: a positive or negative number. Use positive numbers to minimize benchmark results. Use negative numbers to maximize bechmark results. Large absolute values mean large jump distance at each iteration. Use smaller values as you get closer to the optimum. 
+ - `xs` is a 2-element array. Run benchmark twice with the provided sets of parameters.
+ - feed benchmark results as an array of 2 numbers to `step()` function, and obtain `improvedParameters`
+ - if improved parameters are out of range, fix them: round them and clip to closest valid values. Many methods of rounding and chosing the closest valid values are possible.
+ - run the next iteration
+ 
+`iterate()` and `iterateSync()` use `perturb()` to run steps 1-4 in synchronous and asynchronous manner respectively
+
+`optimize()` runs all the 6 steps in a loop 
+
+
 ## 0.2 roadmap
 
 - Field-test with real problems
