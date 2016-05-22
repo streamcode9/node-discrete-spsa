@@ -8,6 +8,5 @@
     },
     "exclude": [
         "node_modules"
-		, "aur-vim-youcompleteme-git"
     ]
 }
