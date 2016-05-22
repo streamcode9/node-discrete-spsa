@@ -45,10 +45,11 @@ improvedParameters = step(ys)
 - Use the improved parameters in next iteration
 - Stop when benchmark results stop to improve
 
+## API Documentation
 
 The `perturb()` function implements the algorithm. The rest of the library are wrappers to use it more easily.
 
-perturb() accepts `currentGuess[]` and `learningRate`, and returns `xs[]` and `step()` 
+`perturb()` accepts `currentGuess[]` and `learningRate`, and returns `xs[]` and `step()` 
  - `currentGuess`: an array numbers, current parameters
  - `learningRate`: a positive or negative number. Use positive numbers to minimize benchmark results. Use negative numbers to maximize bechmark results. Large absolute values mean large jump distance at each iteration. Use smaller values as you get closer to the optimum. 
  - `xs` is a 2-element array. Run benchmark twice with the provided sets of parameters.
@@ -58,8 +59,13 @@ perturb() accepts `currentGuess[]` and `learningRate`, and returns `xs[]` and `s
  
 `iterate()` and `iterateSync()` use `perturb()` to run steps 1-4 in synchronous and asynchronous manner respectively
 
-`optimize()` runs all the 6 steps in a loop 
+`optimize()` runs all the 6 steps in a loop. It accepts an object with 6 fields, all of them are mandatory:
 
+- `iterations`: number of iterations to perform
+- `initialGuess`: initial parameters vector
+- `learningRate`: the learning rate numeric parameter, see above
+- `fn`: the benchmark function. Accepts parameters, returns a promise of a number.
+- `fix`: accepts parameters vector, returns a fixed version
 
 ## 0.2 roadmap
 
