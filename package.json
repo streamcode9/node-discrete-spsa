@@ -4,7 +4,7 @@
 , "keywords" : [ "optimization", "stochastic", "algorithm", "multidimentional", "discrete" ]
 , "repository" : "streamcode9/node-discrete-spsa"
 , "license" : "WTFPL"
-, "files" : [ "README.md", "lib" ]
+, "files" : [ "lib/*.js" ]
 , "scripts" :
   { "prepublish" : "tsc"
   , "test": "mocha lib"
@@ -14,7 +14,6 @@
 , "main" : "lib/app.js"
 , "dependencies":
   { "bluebird": "^3.3.5"
-  , "abraxas": "^2.1.9"
   }
 , "devDependencies" :
   { "typescript" : "*"
