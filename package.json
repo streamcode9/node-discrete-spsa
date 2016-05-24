@@ -6,7 +6,11 @@
     "optimization",
     "stochastic",
     "algorithm",
-    "multidimentional",
+    "multidimensional",
+    "probability",
+    "probabilistic",
+    "statistics",
+    "machine learning",
     "discrete"
   ],
   "repository": "streamcode9/node-discrete-spsa",
