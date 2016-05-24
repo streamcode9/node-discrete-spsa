@@ -1,26 +1,35 @@
-{ "name" : "discrete-spsa"
-, "version" : "0.1.0"
-, "description" : "Discrete Simultaneous Perturbation Stochastic Approximation algorithm by Hill, 2005"
-, "keywords" : [ "optimization", "stochastic", "algorithm", "multidimentional", "discrete" ]
-, "repository" : "streamcode9/node-discrete-spsa"
-, "license" : "WTFPL"
-, "files" : [ "lib/*.js" ]
-, "scripts" :
-  { "prepublish" : "tsc"
-  , "test": "mocha lib"
-  , "coverage" : "istanbul instrument --output lib-cov --no-compact --variable global.__coverage__ lib && ISTANBUL_REPORTERS=text-summary,lcovonly mocha --reporter mocha-istanbul lib-cov"
-  , "tslint" : "tslint *.ts examples/*.ts"
-  }
-, "main" : "lib/app.js"
-, "dependencies":
-  { "bluebird": "^3.3.5"
-  }
-, "devDependencies" :
-  { "typescript" : "*"
-  , "mocha": "^2.4.5"
-  , "istanbul" : "*"
-  , "mocha-istanbul" : "*"
-  , "tslint" : "*"
-  , "codeclimate-test-reporter": "^0.3.1"
+{
+  "name": "discrete-spsa",
+  "version": "0.1.0",
+  "description": "Discrete Simultaneous Perturbation Stochastic Approximation algorithm by Hill, 2005",
+  "keywords": [
+    "optimization",
+    "stochastic",
+    "algorithm",
+    "multidimentional",
+    "discrete"
+  ],
+  "repository": "streamcode9/node-discrete-spsa",
+  "license": "WTFPL",
+  "files": [
+    "lib/*.js"
+  ],
+  "scripts": {
+    "prepublish": "tsc",
+    "test": "mocha lib",
+    "coverage": "istanbul instrument --output lib-cov --no-compact --variable global.__coverage__ lib && ISTANBUL_REPORTERS=text-summary,lcovonly mocha --reporter mocha-istanbul lib-cov",
+    "tslint": "tslint *.ts examples/*.ts"
+  },
+  "main": "lib/app.js",
+  "dependencies": {
+    "bluebird": "^3.3.5"
+  },
+  "devDependencies": {
+    "codeclimate-test-reporter": "^0.3.1",
+    "istanbul": "*",
+    "mocha": "^2.4.5",
+    "mocha-istanbul": "*",
+    "tslint": "*",
+    "typescript": "*"
   }
 }
