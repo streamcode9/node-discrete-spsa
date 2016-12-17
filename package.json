@@ -1,6 +1,6 @@
 {
   "name": "discrete-spsa",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discrete Simultaneous Perturbation Stochastic Approximation algorithm by Hill, 2005",
   "keywords": [
     "optimization",
@@ -26,12 +26,12 @@
   },
   "main": "lib/app.js",
   "dependencies": {
-    "bluebird": "^3.3.5"
+    "bluebird": "^3.4.6"
   },
   "devDependencies": {
-    "codeclimate-test-reporter": "^0.3.1",
+    "codeclimate-test-reporter": "^0.4.0",
     "istanbul": "*",
-    "mocha": "^2.4.5",
+    "mocha": "^3.2.0",
     "mocha-istanbul": "*",
     "tslint": "*",
     "typescript": "*"
