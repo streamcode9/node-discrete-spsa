@@ -12,7 +12,7 @@ describe('Test', () => {
 		assert.ok(theta[0] === 4 || theta[0] === 5)
 	})
 
-	it('async 1d optimization of x => sin(x / 100) should converge', done => {
+	it('async 1d optimization of x => sin(x / 100) should converge', (done: MochaDone) => {
 		const run = (i = 1, theta = [0]) => {
 			lib.iteration(x => new Promise<number>(resolve => resolve(Math.sin(x / 3))), theta, -1.3 * 10 / i)
 				.then(t => {
