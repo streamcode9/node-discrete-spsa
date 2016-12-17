@@ -1,6 +1,6 @@
 {
   "name": "discrete-spsa",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discrete Simultaneous Perturbation Stochastic Approximation algorithm by Hill, 2005",
   "keywords": [
     "optimization",
