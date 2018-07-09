@@ -5,10 +5,9 @@ script:
     - npm run tslint
     - npm run coverage
 node_js:
+  - 10
+  - 8
   - 6
-  - 4
-  - "0.12"
-  - "0.10"
 addons:
   code_climate:
     repo_token: b5e7fa064639c14775326edb8d1b6ad1aa7e78055a7c14ee590e569e07ad43e8
