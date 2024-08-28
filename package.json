@@ -31,7 +31,7 @@
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.0",
     "istanbul": "*",
-    "mocha": "^5.2.0",
+    "mocha": "^10.7.3",
     "mocha-istanbul": "*",
     "tslint": "*",
     "typescript": "*"
